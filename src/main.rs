@@ -15,6 +15,7 @@ struct Cli {
     #[arg(long = "config-dir", global = true)]
     config_dir: bool,
 
+    // positional alias removed; use `pj show <alias>` instead
     #[command(subcommand)]
     command: Option<Commands>,
 }
@@ -40,6 +41,18 @@ enum Commands {
         /// Sort by which column
         #[arg(long, value_enum, default_value_t = crate::opts::SortBy::LastModified)]
         sort: crate::opts::SortBy,
+    },
+
+    /// Show the path for a project alias
+    Show {
+        /// Alias or directory name
+        alias: String,
+    },
+
+    /// Install shell integration
+    Init {
+        /// Shell to initialize. Supported: fish.
+        shell: String,
     },
 }
 
@@ -78,6 +91,13 @@ fn main() -> Result<()> {
         }
         Some(Commands::Ls { sort }) => {
             commands::cmd_ls(sort)?;
+        }
+        Some(Commands::Init { shell }) => {
+            commands::cmd_init(&shell)?;
+        }
+        Some(Commands::Show { alias }) => {
+            let path = commands::cmd_show(&alias)?;
+            println!("{}", path.display());
         }
         None => {
             // No subcommand provided — print help
