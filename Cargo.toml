@@ -1,0 +1,16 @@
+[package]
+name = "projekt"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.7"
+dirs-next = "2"
+uuid = { version = "1", features = ["v7"] }
+owo-colors = "3"
+chrono = "0.4"
+anyhow = "1.0"
+git2 = "0.17"
+walkdir = "2"
