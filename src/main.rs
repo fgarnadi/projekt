@@ -1,6 +1,5 @@
-mod commands;
-mod config;
-mod models;
+mod cmd;
+mod db;
 mod opts;
 
 use std::path::PathBuf;
@@ -61,7 +60,7 @@ fn main() -> Result<()> {
 
     if cli.config_dir {
         // Print the config directory (not the file) and exit
-        let cfg_file = config::default_config_file()?;
+        let cfg_file = db::default_config_file()?;
         if let Some(parent) = cfg_file.parent() {
             println!("{}", parent.display());
         } else {
@@ -87,16 +86,16 @@ fn main() -> Result<()> {
                     .and_then(|os| os.to_str().map(|s| s.to_string()))
             });
 
-            commands::cmd_add(path, name, tag_vec)?;
+            cmd::cmd_add(path, name, tag_vec)?;
         }
         Some(Commands::Ls { sort }) => {
-            commands::cmd_ls(sort)?;
+            cmd::cmd_ls(sort)?;
         }
         Some(Commands::Init { shell }) => {
-            commands::cmd_init(&shell)?;
+            cmd::cmd_init(&shell)?;
         }
         Some(Commands::Show { alias }) => {
-            let path = commands::cmd_show(&alias)?;
+            let path = cmd::cmd_show(&alias)?;
             println!("{}", path.display());
         }
         None => {
